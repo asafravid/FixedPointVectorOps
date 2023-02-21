@@ -1,4 +1,4 @@
-﻿
+
 #include <iostream>
 #include <immintrin.h>
 
@@ -50,56 +50,56 @@ void print_m128i_4x32(__m128i* to_print, const char* name) {
 
 int main()
 {
-    // Packed 16 8bits
+    // Vector of 16 8bit elements: representing 8 8b complex elements
+    // (real8b, imag8b), (real8b, imag8b), (real8b, imag8b), (real8b, imag8b) (real8b, imag8b), (real8b, imag8b), (real8b, imag8b), (real8b, imag8b)
     {
-        __m128i a16x8 = _MM_SETR_EPI8(-1, 0xf, 0xe, 0xd, 0xc, 0xb, 0xa, 9, 8, 7, 6, 5, 4, 3, 2, 1);
-        __m128i b16x8 = _MM_SETR_EPI8(-1, 0xf, 0xe, 0xd, 0xc, 0xb, 0xa, 9, 8, 7, 6, 5, 4, 3, 2, 1);
-        __m128i c16x8 = _mm_add_epi8(a16x8, b16x8);
+        __m128i r16x8 = _MM_SETR_EPI8(-1, 0xf, 0xe, 0xd, 0xc, 0xb, 0xa, 9, 8, 7, 6, 5, 4, 3, 2, 1);
+        __m128i j16x8 = _MM_SETR_EPI8(-1, 0xf, 0xe, 0xd, 0xc, 0xb, 0xa, 9, 8, 7, 6, 5, 4, 3, 2, 1);
+        __m128i c16x8 = _mm_add_epi8(r16x8, j16x8);
 
-        print_m128i_16x8(&a16x8, "a16x8");
-        print_m128i_16x8(&b16x8, "b16x8");
+        print_m128i_16x8(&r16x8, "r16x8");
+        print_m128i_16x8(&j16x8, "j16x8");
         print_m128i_16x8(&c16x8, "c16x8");
     }
 
-    // Packet 8 16bits
+    // Packet 8 16bits: representing 4 16b complex elements
+    // (real16b, imag16b), (real16b, imag16b), (real16b, imag16b), (real16b, imag16b)
     {
-        __m128i a8x16 = _MM_SETR_EPI16(6, 5, 4, 3, 2, 1, 0, -1);
-        __m128i b8x16 = _MM_SETR_EPI16(6, 5, 4, 3, 2, 1, 0, -1);
-        __m128i c8x16 = _mm_add_epi16(a8x16, b8x16);
+        __m128i r8x16 = _MM_SETR_EPI16(6, 5, 4, 3, 2, 1, 0, -1);
+        __m128i j8x16 = _MM_SETR_EPI16(6, 5, 4, 3, 2, 1, 0, -1);
+        __m128i c8x16 = _mm_add_epi16(r8x16, j8x16);
 
-        print_m128i_8x16(&a8x16, "a8x16");
-        print_m128i_8x16(&b8x16, "b8x16");
+        print_m128i_8x16(&r8x16, "r8x16");
+        print_m128i_8x16(&j8x16, "j8x16");
         print_m128i_8x16(&c8x16, "c8x16");
     }
 
-    // Packetd 4 32bits
+    // Packetd 4 32bits: representing 2 32b complex elements
+    // 2 32b complex (real32b, imag32b), (real32b, imag32b)
     {
-        __m128i a4x32 = _MM_SETR_EPI32(1, 0, -1, -2);
-        __m128i b4x32 = _MM_SETR_EPI32(1, 0, -1, -2);
-        __m128i c4x32 = _mm_add_epi32(a4x32, b4x32);
+        __m128i r4x32 = _MM_SETR_EPI32(1, 0, -1, -2);
+        __m128i j4x32 = _MM_SETR_EPI32(1, 0, -1, -2);
+        __m128i c4x32 = _mm_add_epi32(r4x32, j4x32);
 
-        print_m128i_4x32(&a4x32, "a4x32");
-        print_m128i_4x32(&b4x32, "b4x32");
+        print_m128i_4x32(&r4x32, "r4x32");
+        print_m128i_4x32(&j4x32, "j4x32");
         print_m128i_4x32(&c4x32, "c4x32");
     }
 }
-
 
 /*
 
 Output on Console:
 
-a16x8: 0xff 0x0f 0x0e 0x0d 0x0c 0x0b 0x0a 0x09 0x08 0x07 0x06 0x05 0x04 0x03 0x02 0x01
-b16x8: 0xff 0x0f 0x0e 0x0d 0x0c 0x0b 0x0a 0x09 0x08 0x07 0x06 0x05 0x04 0x03 0x02 0x01
+r16x8: 0xff 0x0f 0x0e 0x0d 0x0c 0x0b 0x0a 0x09 0x08 0x07 0x06 0x05 0x04 0x03 0x02 0x01
+j16x8: 0xff 0x0f 0x0e 0x0d 0x0c 0x0b 0x0a 0x09 0x08 0x07 0x06 0x05 0x04 0x03 0x02 0x01
 c16x8: 0xfe 0x1e 0x1c 0x1a 0x18 0x16 0x14 0x12 0x10 0x0e 0x0c 0x0a 0x08 0x06 0x04 0x02
-a8x16: 0x0006 0x0005 0x0004 0x0003 0x0002 0x0001 0x0000 0xffff
-b8x16: 0x0006 0x0005 0x0004 0x0003 0x0002 0x0001 0x0000 0xffff
+r8x16: 0x0006 0x0005 0x0004 0x0003 0x0002 0x0001 0x0000 0xffff
+j8x16: 0x0006 0x0005 0x0004 0x0003 0x0002 0x0001 0x0000 0xffff
 c8x16: 0x000c 0x000a 0x0008 0x0006 0x0004 0x0002 0x0000 0xfffe
-a4x32: 0x00000001 0x00000000 0xffffffff 0xfffffffe
-b4x32: 0x00000001 0x00000000 0xffffffff 0xfffffffe
+r4x32: 0x00000001 0x00000000 0xffffffff 0xfffffffe
+j4x32: 0x00000001 0x00000000 0xffffffff 0xfffffffe
 c4x32: 0x00000002 0x00000000 0xfffffffe 0xfffffffc
-
-
 
 
 
