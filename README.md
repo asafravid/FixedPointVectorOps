@@ -12,7 +12,7 @@ Fixed Point Vector Operations in [64/128/256]bit Registers
 
 ### Building in Linux
 
-    g++ -g -o FixedPoint FixedPoint.cpp -lstdc++ 
+    g++ -g -o FixedPoint FixedPoint.cpp -lstdc++ -mavx
     
 ### Console Output
 
