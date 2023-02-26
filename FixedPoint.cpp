@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <immintrin.h>
+#include <string.h> // memcpy
 
 template <class T> inline char GetChar(T value, size_t index)
 {
@@ -53,16 +54,16 @@ int main()
     // Vector of 16 8bit elements: representing 8 8b complex elements
     // (real8b, imag8b), (real8b, imag8b), (real8b, imag8b), (real8b, imag8b) (real8b, imag8b), (real8b, imag8b), (real8b, imag8b), (real8b, imag8b)
     {
-        __m128i r16x8 = _MM_SETR_EPI8(-1, 0xf, 0xe, 0xd, 0xc, 0xb, 0xa, 9, 8, 7, 6, 5, 4, 3, 2, 1);   // vector of real parts// vector of real parts
-        __m128i j16x8 = _MM_SETR_EPI8(-1, 0xf, 0xe, 0xd, 0xc, 0xb, 0xa, 9, 8, 7, 6, 5, 4, 3, 2, 1);   // vector of imag parts// vector of imag parts
+        __m128i r16x8 = _mm_setr_epi8(-1, 0xf, 0xe, 0xd, 0xc, 0xb, 0xa, 9, 8, 7, 6, 5, 4, 3, 2, 1); //_MM_SETR_EPI8(-1, 0xf, 0xe, 0xd, 0xc, 0xb, 0xa, 9, 8, 7, 6, 5, 4, 3, 2, 1);   // vector of real parts// vector of real parts
+        __m128i j16x8 = _mm_setr_epi8(-1, 0xf, 0xe, 0xd, 0xc, 0xb, 0xa, 9, 8, 7, 6, 5, 4, 3, 2, 1);   // vector of imag parts// vector of imag parts
         __m128i c16x8 = _mm_add_epi8(r16x8, j16x8);                                                   // c = r - i*j  
 
         print_m128i_16x8(&r16x8, "r16x8");
         print_m128i_16x8(&j16x8, "j16x8");
         print_m128i_16x8(&c16x8, "c16x8");
 
-        __m128i vc8x8_a = _MM_SETR_EPI8( 8,  8,   7,   7,   6,   6,   5,   5,   4,   4,   3,   3,   2,   2, 1, 1); // vector of complex <tuple>(MSBimag, LSBreal)// vector of complex <tuple>(MSBimag, LSBreal)
-        __m128i vc8x8_b = _MM_SETR_EPI8(-1, -1, 0xf, 0xf, 0xe, 0xe, 0xd, 0xd, 0xc, 0xc, 0xb, 0xb, 0xa, 0xa, 9, 9); // vector of complex <tuple>(MSBimag, LSBreal)// vector of complex <tuple>(MSBimag, LSBreal)
+        __m128i vc8x8_a = _mm_setr_epi8( 8,  8,   7,   7,   6,   6,   5,   5,   4,   4,   3,   3,   2,   2, 1, 1); // vector of complex <tuple>(MSBimag, LSBreal)// vector of complex <tuple>(MSBimag, LSBreal)
+        __m128i vc8x8_b = _mm_setr_epi8(-1, -1, 0xf, 0xf, 0xe, 0xe, 0xd, 0xd, 0xc, 0xc, 0xb, 0xb, 0xa, 0xa, 9, 9); // vector of complex <tuple>(MSBimag, LSBreal)// vector of complex <tuple>(MSBimag, LSBreal)
         __m128i vc8x8_c = _mm_add_epi8(vc8x8_a, vc8x8_b);                                                          // c = a + b
 
         print_m128i_16x8(&vc8x8_a, "vc8x8_a");
@@ -73,12 +74,12 @@ int main()
     // Packet 8 16bits: representing 4 16b complex elements
     // (real16b, imag16b), (real16b, imag16b), (real16b, imag16b), (real16b, imag16b)
     {
-        __m128i r8x16 = _MM_SETR_EPI16(6, 5, 4, 3, 2, 1, 0, -1); // vector of real parts
-        __m128i j8x16 = _MM_SETR_EPI16(6, 5, 4, 3, 2, 1, 0, -1); // vector of imag parts
+        __m128i r8x16 = _mm_setr_epi16(6, 5, 4, 3, 2, 1, 0, -1); // vector of real parts
+        __m128i j8x16 = _mm_setr_epi16(6, 5, 4, 3, 2, 1, 0, -1); // vector of imag parts
         __m128i c8x16 = _mm_add_epi16(r8x16, j8x16);             // c = r - i*j
 
-        __m128i vc4x16_a = _MM_SETR_EPI16(2, 2, 1, 1, 0, 0, -1, -1); // vector of complex <tuple>(MSBimag, LSBreal)
-        __m128i vc4x16_b = _MM_SETR_EPI16(6, 6, 5, 5, 4, 4,  3,  3); // vector of complex <tuple>(MSBimag, LSBreal)
+        __m128i vc4x16_a = _mm_setr_epi16(2, 2, 1, 1, 0, 0, -1, -1); // vector of complex <tuple>(MSBimag, LSBreal)
+        __m128i vc4x16_b = _mm_setr_epi16(6, 6, 5, 5, 4, 4,  3,  3); // vector of complex <tuple>(MSBimag, LSBreal)
         __m128i vc4x16_c = _mm_add_epi16(vc4x16_a, vc4x16_b);        // c = a + b
 
 
@@ -90,16 +91,16 @@ int main()
     // Packetd 4 32bits: representing 2 32b complex elements
     // 2 32b complex (real32b, imag32b), (real32b, imag32b)
     {
-        __m128i r4x32    = _MM_SETR_EPI32(1, 0, -1, -2); // vector of real parts
-        __m128i j4x32    = _MM_SETR_EPI32(1, 0, -1, -2); // vector of imag parts
+        __m128i r4x32    = _mm_setr_epi32(1, 0, -1, -2); // vector of real parts
+        __m128i j4x32    = _mm_setr_epi32(1, 0, -1, -2); // vector of imag parts
         __m128i c4x32    = _mm_add_epi32(r4x32, j4x32);  // c = r - i*j
 
         print_m128i_4x32(&r4x32, "r4x32");
         print_m128i_4x32(&j4x32, "j4x32");
         print_m128i_4x32(&c4x32, "c4x32");
 
-        __m128i vc2x32_a = _MM_SETR_EPI32(-1, -1, -2, -2);    // vector of complex <tuple>(MSBimag, LSBreal)
-        __m128i vc2x32_b = _MM_SETR_EPI32( 1,  1,  0,  0);    // vector of complex <tuple>(MSBimag, LSBreal)
+        __m128i vc2x32_a = _mm_setr_epi32(-1, -1, -2, -2);    // vector of complex <tuple>(MSBimag, LSBreal)
+        __m128i vc2x32_b = _mm_setr_epi32( 1,  1,  0,  0);    // vector of complex <tuple>(MSBimag, LSBreal)
         __m128i vc2x32_c = _mm_add_epi32(vc2x32_a, vc2x32_b); // c = a + b
 
         print_m128i_4x32(&vc2x32_a, "vc2x32_a");
